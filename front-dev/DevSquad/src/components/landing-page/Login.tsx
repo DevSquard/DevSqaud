@@ -1,8 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import style from './styles/MainBox.module.css';
 import kakaoSymbol from '/assets/mainpage/kakaoSymbol.png';
-import { ChangeEvent, FormEvent, useState } from 'react';
-import { useAuth } from '../../hooks/useAuth';
+import { ChangeEvent, useState } from 'react';
+import { apiAxios } from '../../apis/apiAxios';
 
 
 interface LoginForm {
@@ -13,13 +13,14 @@ interface LoginForm {
 export default function Login() {
   const [ loginForm, setLoginForm ] = useState<LoginForm>({ email: '', password: '' });
   const navigate = useNavigate();
-  const { login } = useAuth();
 
   // 로그인 폼 제출 처리 함수
-  const handleLogin = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    login()
+  const handleLogin = async () => {
+    console.log('API Base URL:', process.env.REACT_APP_REST_SERVER);
+
+    await apiAxios.post("/login", loginForm);
   };
+
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setLoginForm(pre => ({
