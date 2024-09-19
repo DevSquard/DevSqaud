@@ -65,29 +65,24 @@ public class OAuthService {
 
 	private String getAccessToken(String code, String provider) {
 		// 설정 가져오기
-		
+		OAuth2Properties.Client client = oAuth2Properties.getClients().get(provider);
 		
 		// 1. code를 통해 google에서 제공하는 accessToken을 가져온다.
 		String decodedCode = URLDecoder.decode(code, StandardCharsets.UTF_8);
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-		String clientId = "1060643141913-qg5cp9eff1ct5msu51ii7g5nkmvfo8rf.apps.googleusercontent.com";
-		String clientSecret = "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";
-		String redirectURI = "http://localhost:5173/oauth/google";
-		headers.setBasicAuth(clientId, clientSecret);
+		headers.setBasicAuth(client.getClientId(), client.getClientSecret());
 		
 		MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
-		params.add("client_id", clientId);
-		params.add("client_secret", clientSecret);
+		params.add("client_id", client.getClientId());
+		params.add("client_secret", client.getClientSecret());
 		params.add("code", decodedCode);
 		params.add("grant_type", "authorization_code");
-		params.add("redirect_uri", redirectURI);
-		
-		String tokenURI = "https://oauth2.googleapis.com/token";
+		params.add("redirect_uri", client.getRedirectUri());
 		
 		RestTemplate rt = new RestTemplate();
 		HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(params, headers);
-		ResponseEntity<Map> responseEntity = rt.postForEntity(tokenURI, requestEntity, Map.class);
+		ResponseEntity<Map> responseEntity = rt.postForEntity(client.getTokenUri(), requestEntity, Map.class);
 		
 		if (!responseEntity.getStatusCode().is2xxSuccessful() || responseEntity.getBody() == null) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "사용자 정보를 가져올 수 없음");
@@ -99,13 +94,13 @@ public class OAuthService {
 
 	private User generateOAuthUser(String accessToken, String provider) {
 		// 설정 가져오기
+		OAuth2Properties.Client client = oAuth2Properties.getClients().get(provider);
 		
-		String userIngoURI = "https://www.googleapis.com/oauth2/v3/userinfo";
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Authorization", "Bearer " + accessToken);
 		
 		RestTemplate rt = new RestTemplate();
-		ResponseEntity<JsonNode> responseEntity = rt.exchange(userIngoURI, HttpMethod.GET, new HttpEntity<>(headers), JsonNode.class);
+		ResponseEntity<JsonNode> responseEntity = rt.exchange(client.getUserInfoRequestUri(), HttpMethod.GET, new HttpEntity<>(headers), JsonNode.class);
 
 		if (!responseEntity.getStatusCode().is2xxSuccessful() || responseEntity.getBody() == null) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "사용자 정보를 가져올 수 없음");
