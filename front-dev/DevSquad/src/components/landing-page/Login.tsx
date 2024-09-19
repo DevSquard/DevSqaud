@@ -1,22 +1,30 @@
 import { useNavigate } from 'react-router-dom';
 import style from './styles/MainBox.module.css';
 import kakaoSymbol from '/assets/mainpage/kakaoSymbol.png';
-import { FormEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
+import { useAuth } from '../../hooks/useAuth';
 
-export default function MainBox() {
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
+
+interface LoginForm {
+  email: string,
+  password: string
+};
+
+export default function Login() {
+  const [ loginForm, setLoginForm ] = useState<LoginForm>({ email: '', password: '' });
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   // 로그인 폼 제출 처리 함수
   const handleLogin = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log(event);
-    console.log('이메일:', email);
-    console.log('비밀번호:', password);
-
-    // 대충 api 호출하고 처리 어쩌구 저쩌고
-    
+    login()
+  };
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setLoginForm(pre => ({
+      ...pre, [name] : value
+    }));
   };
 
   return (
@@ -28,8 +36,23 @@ export default function MainBox() {
           <form onSubmit={handleLogin}>
             <div className={style.test}>
               <div className={style.inputGroup}>
-                <input name='email' placeholder='Email' value={email} onChange={(e) => setEmail(e.target.value)} className={style.inputField} required/>
-                <input type="password" name="password" placeholder='Password' value={password} onChange={(e) => setPassword(e.target.value)} className={style.inputField} required/>
+                <input 
+                  name='email' 
+                  placeholder='Email' 
+                  value={loginForm.email} 
+                  onChange={handleChange} 
+                  className={style.inputField} 
+                  required
+                />
+                <input 
+                  type="password" 
+                  name="password" 
+                  placeholder='Password' 
+                  value={loginForm.password} 
+                  onChange={handleChange} 
+                  className={style.inputField} 
+                  required
+                />
               </div>
               <div className={style.buttonGroup}>
                 <button className={style.loginButton}>Login</button>

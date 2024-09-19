@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { ChangeEvent, KeyboardEvent, useState } from 'react';
 import { TextField, InputAdornment, IconButton } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
 
 const SearchBox = () => {
-  const [searchTerm, setSearchTerm] = React.useState('');
+  const [searchTerm, setSearchTerm] = useState<string>('');
 
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
   };
 
@@ -14,12 +14,22 @@ const SearchBox = () => {
     setSearchTerm('');
   };
 
+  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      // 엔터 키를 눌렀을 때 검색 실행
+      console.log('Searching for:', searchTerm);
+      // 검색 로직 추가할곳
+
+    }
+  };
+
   return (
     <TextField
       value={searchTerm}
       onChange={handleSearchChange}
+      onKeyDown={handleKeyDown}
       variant="outlined"
-      placeholder="Type to search"
+      placeholder="Search"
       InputProps={{
         startAdornment: (
           <InputAdornment position="start">
@@ -37,6 +47,17 @@ const SearchBox = () => {
         ),
       }}
       fullWidth
+      sx={{
+        width: '300px',
+        height: '30px',
+        '& .MuiInputBase-input': {
+          fontSize: '14px',
+        },
+        '& .MuiSvgIcon-root': {
+          fontSize: '20px',
+        },
+        borderRadius: '16px'
+      }}
     />
   );
 };

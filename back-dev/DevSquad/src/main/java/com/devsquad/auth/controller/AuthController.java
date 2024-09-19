@@ -18,6 +18,7 @@ import com.devsquad.auth.domain.LoginResponse;
 import com.devsquad.auth.domain.SignUpRequest;
 import com.devsquad.auth.domain.SignUpResponse;
 import com.devsquad.auth.domain.UserDeleteRequest;
+import com.devsquad.auth.entity.User;
 import com.devsquad.auth.service.AuthService;
 import com.devsquad.common.utils.TokenUtils;
 

@@ -1,13 +1,12 @@
-import { useState } from 'react';
 import style from './styles/PostForm.module.css';
 
-interface Post {
-  title: string,
-  content: string
-};
+// interface Post {
+//   title: string,
+//   content: string
+// };
 
 export default function PostForm() {
-  const [post, setPost] = useState<Post>();
+  // const [post, setPost] = useState<Post>();
 
   const handleSavePost = () => {
     

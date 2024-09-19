@@ -25,11 +25,11 @@ const PostItem: React.FC<Post> = ({ id, title, author, date, hits }) => (
 export default function PostList() {
   const [posts, setPosts] = useState<Post[]>([]);
   const navigate = useNavigate();
-
+  
   const handleCreateForm = () => {
     navigate("/community/write");
   };
-
+  
   useEffect(() => {
     // 데이터를 API에서 가져오는 부분
     const fetchPosts = async () => {
@@ -47,8 +47,14 @@ export default function PostList() {
   return (
     <div className={style.postListContainer}>
       <h4 className={style.title}>게시판</h4>
-      <SearchBox />
-      <button onClick={handleCreateForm}>글 작성</button>
+      <div className={style.SearchAndCreate}>
+        <SearchBox />
+        <button className={style.createBtn} onClick={handleCreateForm}>
+          <div>
+            <span>CREATE</span>
+          </div>
+        </button>
+      </div>
       <table className={style.postTable}>
         <thead className={style.headerItem}>
           <tr>

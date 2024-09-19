@@ -1,6 +1,4 @@
-import React from 'react';
-import Carousel from '../components/common/Carousel';
-import MainBox from '../components/landing-page/MainBox';
+import Login from '../components/landing-page/Login';
 import style from './styles/MainPage.module.css';
 import StackCard from '../components/common/StackCard';
 import RecruitBox from '../components/landing-page/RecruitBox';
@@ -9,7 +7,7 @@ const MainPage = () => {
     return (
         <div className={style.container}>
             <div className={style.mainContent}>
-                <MainBox />
+                <Login />
                 <div className={style.cardBox}>
                     <StackCard titleText="시험 글1입니다."/>
                     <StackCard titleText="시험 글2입니다."/>

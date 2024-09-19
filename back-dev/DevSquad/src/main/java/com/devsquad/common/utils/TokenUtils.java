@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 import com.devsquad.auth.domain.LoginResponse;
 import com.devsquad.auth.entity.User;
 import com.devsquad.common.jwt.JwtProvider;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.servlet.http.Cookie;

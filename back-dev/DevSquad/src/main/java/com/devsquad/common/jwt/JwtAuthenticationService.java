@@ -1,6 +1,7 @@
 package com.devsquad.common.jwt;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 import org.springframework.security.core.Authentication;
@@ -29,6 +30,8 @@ public class JwtAuthenticationService {
 		
 		// 리프레시 토큰을 DB에 저장
 		user.setRefreshToken(refreshToken);
+		// 유저 로그인 스탬프 찍기
+		user.setLoginedAt(LocalDateTime.now());
 		userRepo.save(user);
 		
 		// 생성된 리프레시 토큰을 쿠키에 담아 응답

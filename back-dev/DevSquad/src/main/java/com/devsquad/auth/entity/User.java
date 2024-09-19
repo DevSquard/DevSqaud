@@ -99,7 +99,8 @@ public class User implements UserDetails {
 	@Column
 	private String intro;
 
-	@Column(name = "streak_count")
+	@Column(name = "streak_count", nullable = false)
+	@Builder.Default
 	private int streakCount = 0;
 	
 	@ElementCollection

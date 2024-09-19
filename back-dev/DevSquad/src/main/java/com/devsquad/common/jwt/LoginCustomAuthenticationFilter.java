@@ -8,6 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.devsquad.auth.domain.LoginRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,11 +22,13 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class LoginCustomAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 	private JwtAuthenticationService jwtAuthenticationService;
-	
+
 	// 로그인되는 경로 및 메서드 타입 지정
 	private static final AntPathRequestMatcher LOGIN_PATH = new AntPathRequestMatcher("/api/auth/login", "POST");
 	
-	public LoginCustomAuthenticationFilter(AuthenticationManager authenticationManager, JwtAuthenticationService jwtAuthenticationService) {
+	public LoginCustomAuthenticationFilter(
+			AuthenticationManager authenticationManager, 
+			JwtAuthenticationService jwtAuthenticationService) {
 		super(LOGIN_PATH); // AbstractAuthenticationProcessingFilter <- 여기로 전달
 		setAuthenticationManager(authenticationManager); // AuthenticationManager를 설정
 		this.jwtAuthenticationService = jwtAuthenticationService; // JwtAuthenticationService를 필드에 할당
@@ -53,6 +56,7 @@ public class LoginCustomAuthenticationFilter extends AbstractAuthenticationProce
 		return authenticate;
 	}
 
+	@Transactional
 	@Override
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
 			Authentication authResult) throws IOException, ServletException {
