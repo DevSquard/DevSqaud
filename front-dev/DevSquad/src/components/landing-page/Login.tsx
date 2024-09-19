@@ -1,8 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import style from './styles/MainBox.module.css';
-import kakaoSymbol from '/assets/mainpage/kakaoSymbol.png';
 import { ChangeEvent, useState } from 'react';
-import { apiAxios } from '../../apis/apiAxios';
+// import { apiAxios } from '../../apis/apiAxios';
 import googleSymbol from '../../assets/google.png';
 
 
