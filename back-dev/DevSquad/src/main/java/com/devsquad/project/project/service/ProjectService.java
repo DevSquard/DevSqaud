@@ -1,5 +1,8 @@
 package com.devsquad.project.project.service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -20,10 +23,21 @@ public class ProjectService {
     private final UserRepository userRepository;
 
     public List<ProjectResponse> getAllProject() {
+    	//모든 프로젝트 가져오고
         List<Project> proList = projectRepository.findAll();
-        return proList.stream().map(ProjectResponse::toDTO).toList();
+        //빈 배열 하나 만들어주고
+        List<Project> pList =  new ArrayList<Project>();
+        //Project 타입의 변수 p로 전체 목록을 하나씩 뽑아서
+        for(Project p : proList) {    
+        	//모집 종료 날짜가 지나지 않았거나, 모집 시작 날짜가 지났으면 새로운 배열에 추가
+        	if(!p.getEndedAt().isBefore(LocalDate.now()) && p.getStartedAt().isBefore(LocalDate.now()) ) {
+        		pList.add(p);
+        	}
+        }
+        //새롭게 추가된 배열 반환
+        return pList.stream().map(ProjectResponse::toDTO).toList();
     }
-
+    
     public ProjectResponse addProject(ProjectRequest pro) {
     	// request에 담긴 userId로 유저 가져오기
     	User user = userRepository.findByIdAndDeletedAtIsNull(pro.getUserId()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
@@ -64,7 +78,12 @@ public class ProjectService {
     public ProjectResponse updateProject(ProjectRequest pro) {
     	//id를 통해 프로젝트를 찾고
         Project project = projectRepository.findById(pro.getId()).orElseThrow(() -> new IllegalArgumentException("없음"));
-        //찾은 프로젝트 수정 후 저장
+        //수정할 값이 null이 아니라면 입력한 값으로 수정
+        if(pro.getDescription() != null) project.setDescription(pro.getDescription());
+        if(pro.getSimpleIntro() != null) project.setSimpleIntro(pro.getSimpleIntro());
+        if(pro.getProjectName() != null) project.setProjectName(pro.getProjectName());
+        
+        //프로젝트 수정 후 저장
         Project updatedProject = projectRepository.save(project);
         //타입 변환 후 반환
         return ProjectResponse.toDTO(updatedProject);
