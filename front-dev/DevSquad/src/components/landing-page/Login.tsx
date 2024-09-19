@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import style from './styles/MainBox.module.css';
 import { ChangeEvent, useState } from 'react';
+import kakaoSymbol from '/assets/mainpage/kakaoSymbol.png';
 // import { apiAxios } from '../../apis/apiAxios';
 import googleSymbol from '../../assets/google.png';
 
@@ -33,13 +34,27 @@ export default function Login() {
     const params = new URLSearchParams({
       scope: "email profile",
       response_type: "code",
-      redirect_uri: "http://localhost:5173/oauth/google",
-      client_id: "1060643141913-qg5cp9eff1ct5msu51ii7g5nkmvfo8rf.apps.googleusercontent.com",
+      redirect_uri: import.meta.env.VITE_APP_GOOGLE_REDIRECT_URI,
+      client_id: import.meta.env.VITE_APP_GOOGLE_ID,
     });
     const GOOGLE_URL = `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
   
     // 지정한 경로로 이동
     window.location.href = GOOGLE_URL;
+    
+  };
+
+  const handleKakaoLogin = () => {
+    // 구글 로그인 버튼 클릭 시 이동하는 경로 지정
+    const params = new URLSearchParams({
+      response_type: "code",
+      redirect_uri: import.meta.env.VITE_APP_KAKAO_REDIRECT_URI,
+      client_id: import.meta.env.VITE_APP_KAKAO_ID,
+    });
+    const KAKAO_URL = `https://kauth.kakao.com/oauth/authorize?${params.toString()}`;
+  
+    // 지정한 경로로 이동
+    window.location.href = KAKAO_URL;
     
   };
 
@@ -82,6 +97,13 @@ export default function Login() {
           <div className={style.googleLoginContainer}>
             <button onClick={() => handleGoogleLogin()} className={style.googleButton}>
               <img src={googleSymbol} alt="구글 로그인" className={style.googleLogin}/>
+            </button>
+          </div>
+          {/* 카카오 폼으로 이동 */}
+          <div className={style.kakaoLoginContainer}>
+            <button onClick={() => handleKakaoLogin()} className={style.googleButton}>
+              <img src={kakaoSymbol} alt="카카오심볼" className={style.kakaoSymbolImg} />
+              <p className={style.kakaoLabel}>카카오 로그인</p>
             </button>
           </div>
       </div>

@@ -14,7 +14,7 @@
   border: 1px solid #ccc;
   border-radius: 2rem;
   width: 400px;
-  height: 330px;
+  height: auto;
   margin-left: auto;
   overflow: hidden;
 }
@@ -94,4 +94,29 @@
 
 .googleLogin {
   width: 200px;
+}
+
+.kakaoLoginContainer {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 12px;
+  font-size: 30dp;
+  background-color: #FEE500;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.kakaoSymbolImg {
+  height: 20px;
+  line-height: 20px;
+  margin-right: 10px;
+}
+
+.kakaoLabel {
+  margin: 0;
+  text-align: center;
+  font-weight: 550;
 }
