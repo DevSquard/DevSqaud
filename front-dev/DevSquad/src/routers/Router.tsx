@@ -26,7 +26,9 @@ export default function Router() {
 
         {/* 마이 페이지 */}
         <Route path="/my-page/*" element={<MyPage />} />
-        
+
+        {/* 404 에러 페이지 */}
+        <Route path="/*" element={<h1>아마 404</h1>} />
 
       </Route>
     </Routes>

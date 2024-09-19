@@ -3,6 +3,7 @@ import style from './styles/MainBox.module.css';
 import kakaoSymbol from '/assets/mainpage/kakaoSymbol.png';
 import { ChangeEvent, useState } from 'react';
 import { apiAxios } from '../../apis/apiAxios';
+import googleSymbol from '../../assets/google.png';
 
 
 interface LoginForm {
@@ -18,7 +19,7 @@ export default function Login() {
   const handleLogin = async () => {
     console.log('API Base URL:', process.env.REACT_APP_REST_SERVER);
 
-    await apiAxios.post("/login", loginForm);
+    // await apiAxios.post("/login", loginForm);
   };
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -26,6 +27,21 @@ export default function Login() {
     setLoginForm(pre => ({
       ...pre, [name] : value
     }));
+  };
+
+  const handleGoogleLogin = () => {
+    // 구글 로그인 버튼 클릭 시 이동하는 경로 지정
+    const params = new URLSearchParams({
+      scope: "email profile",
+      response_type: "code",
+      redirect_uri: "http://localhost:5173/oauth/google",
+      client_id: "1060643141913-qg5cp9eff1ct5msu51ii7g5nkmvfo8rf.apps.googleusercontent.com",
+    });
+    const GOOGLE_URL = `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
+  
+    // 지정한 경로로 이동
+    window.location.href = GOOGLE_URL;
+    
   };
 
   return (
@@ -63,10 +79,11 @@ export default function Login() {
         </div>
           {/* 회원가입 폼으로 이동시키기 */}
           <button className={style.signupButton} onClick={() => navigate("/")}>회원가입</button>
-          {/* 카카오 로그인 폼으로 이동시키기 */}
-          <div className={style.kakaoLoginContainer}>
-            <img src={kakaoSymbol} alt="카카오심볼" className={style.kakaoSymbolImg} />
-            <p className={style.kakaoLabel}>카카오 로그인</p>
+          {/* 구글 로그인 폼으로 이동시키기 */}
+          <div className={style.googleLoginContainer}>
+            <button onClick={() => handleGoogleLogin()} className={style.googleButton}>
+              <img src={googleSymbol} alt="구글 로그인" className={style.googleLogin}/>
+            </button>
           </div>
       </div>
     </div>
