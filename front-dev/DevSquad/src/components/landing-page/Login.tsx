@@ -1,9 +1,12 @@
 import { useNavigate } from 'react-router-dom';
 import style from './styles/MainBox.module.css';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import kakaoSymbol from '/assets/mainpage/kakaoSymbol.png';
-// import { apiAxios } from '../../apis/apiAxios';
+import { apiAxios } from '../../apis/apiAxios';
 import googleSymbol from '../../assets/google.png';
+import { useCookies } from 'react-cookie';
+import { useRecoilState } from 'recoil';
+import { isLoggedInState } from '../../recoil/IsLoggedInState';
 
 
 interface LoginForm {
@@ -12,14 +15,22 @@ interface LoginForm {
 };
 
 export default function Login() {
+  const [cookies, setCookie, removeCookie] = useCookies(['accessToken', 'refreshToken']);
+  const [isLoggedIn, setIsLoggedIn] = useRecoilState(isLoggedInState);
   const [ loginForm, setLoginForm ] = useState<LoginForm>({ email: '', password: '' });
   const navigate = useNavigate();
 
   // 로그인 폼 제출 처리 함수
-  const handleLogin = async () => {
-    console.log('API Base URL:', process.env.REACT_APP_REST_SERVER);
-
-    // await apiAxios.post("/login", loginForm);
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    // try {
+    //   // 로그인 API 호출
+    //   const res = await apiAxios.post('/login', loginForm);
+    //   setCookie('accessToken', res.data.accessToken, { path: '/' });
+    //   setIsLoggedIn(true);
+    // } catch (error) {
+    //   console.log(error);
+    // }
   };
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -58,55 +69,73 @@ export default function Login() {
     
   };
 
+  useEffect(() => {
+    // 쿠키에서 액세스 토큰을 읽어서 로그인 상태를 확인합니다.
+    if (cookies.accessToken) {
+      setIsLoggedIn(true);
+    }
+    console.log('Access Token:', cookies.accessToken);
+    console.log('Refresh Token:', cookies.refreshToken);
+  }, [cookies.accessToken]);
+
   return (
     <div className={style.container}>
-      <div className={style.loginContainer}>
-        <h4 className={style.loginTitle}>뭐라 써야할까요</h4>
-        <div className={style.loginInputBox}>
-          {/* 로그인 폼으로 이동시키기 */}
-          <form onSubmit={handleLogin}>
-            <div className={style.test}>
-              <div className={style.inputGroup}>
-                <input 
-                  name='email' 
-                  placeholder='Email' 
-                  value={loginForm.email} 
-                  onChange={handleChange} 
-                  className={style.inputField} 
-                  required
-                />
-                <input 
-                  type="password" 
-                  name="password" 
-                  placeholder='Password' 
-                  value={loginForm.password} 
-                  onChange={handleChange} 
-                  className={style.inputField} 
-                  required
-                />
-              </div>
-              <div className={style.buttonGroup}>
-                <button className={style.loginButton}>Login</button>
-              </div>
+      { isLoggedIn ? (
+        // 로그인 후 다른 화면
+        <div className={style.loginContainer}>
+          <div className={style.loggedInInnerContainer}>
+            <div className={style.myInfo}>
+
             </div>
-          </form>
-        </div>
-          {/* 회원가입 폼으로 이동시키기 */}
-          <button className={style.signupButton} onClick={() => navigate("/")}>회원가입</button>
-          {/* 구글 로그인 폼으로 이동시키기 */}
-          <div className={style.googleLoginContainer}>
-            <button onClick={() => handleGoogleLogin()} className={style.googleButton}>
-              <img src={googleSymbol} alt="구글 로그인" className={style.googleLogin}/>
-            </button>
           </div>
-          {/* 카카오 폼으로 이동 */}
-          <div className={style.kakaoLoginContainer}>
-            <button onClick={() => handleKakaoLogin()} className={style.googleButton}>
+        </div> 
+      ) : (
+        <div className={style.loginContainer}>
+          <div className={style.loginInnerContainer}>
+          <div className={style.loginInputBox}>
+            {/* 로그인 폼으로 이동시키기 */}
+            <form onSubmit={handleLogin}>
+              <div className={style.test}>
+                <div className={style.inputGroup}>
+                  <input 
+                    name='email' 
+                    placeholder='Email' 
+                    value={loginForm.email} 
+                    onChange={handleChange} 
+                    className={style.inputField} 
+                    required
+                  />
+                  <input 
+                    type="password" 
+                    name="password" 
+                    placeholder='Password' 
+                    value={loginForm.password} 
+                    onChange={handleChange} 
+                    className={style.inputField} 
+                    required
+                  />
+                </div>
+                <div className={style.buttonGroup}>
+                  <button className={style.loginButton}>Login</button>
+                </div>
+              </div>
+            </form>
+          </div>
+            {/* 회원가입 폼으로 이동시키기 */}
+            <button className={style.signupButton} onClick={() => navigate("/")}>회원가입</button>
+            {/* 구글 로그인 폼으로 이동시키기 */}
+            <div className={style.googleContainer} onClick={() => handleGoogleLogin()}>
+              <img src={googleSymbol} alt="구글 로그인" className={style.kakaoSymbolImg} />
+              <p className={style.kakaoLabel}>구글 로그인</p>
+            </div>
+            {/* 카카오 폼으로 이동 */}
+            <div className={style.kakaoLoginContainer} onClick={() => handleKakaoLogin()}>
               <img src={kakaoSymbol} alt="카카오심볼" className={style.kakaoSymbolImg} />
               <p className={style.kakaoLabel}>카카오 로그인</p>
-            </button>
-          </div>
-      </div>
+            </div>
+            </div>
+        </div>
+      )}
     </div>
   );
 }
