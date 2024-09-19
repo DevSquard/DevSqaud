@@ -74,8 +74,6 @@ export default function Login() {
     if (cookies.accessToken) {
       setIsLoggedIn(true);
     }
-    console.log('Access Token:', cookies.accessToken);
-    console.log('Refresh Token:', cookies.refreshToken);
   }, [cookies.accessToken]);
 
   return (
