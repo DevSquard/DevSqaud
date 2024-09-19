@@ -57,7 +57,8 @@ public class AuthService {
 	// 회원 탈퇴
 	public void deleteUser(UserDeleteRequest userDeleteRequest) {
 		// 이메일을 통해 user를 가져오기
-		User user = userRepo.findByEmailAndDeletedAtIsNull(userDeleteRequest.getEmail());
+		User user = userRepo.findByEmailAndDeletedAtIsNull(userDeleteRequest.getEmail())
+				.orElseThrow(() -> new IllegalArgumentException("해당 유저를 찾을 수 없습니다."));
 		// user가 null이라면 찾을 수 없다는 에러 메세지 던지기
 		if (user == null) {
 			throw new UsernameNotFoundException("사용자를 찾을 수 없습니다.");
@@ -103,7 +104,8 @@ public class AuthService {
 		log.info("추출한 이메일 -> {}", userEmail);
 		
 		// 이메일을 통해 사용자를 조회하고 refreshToken 비교
-		User user = userRepo.findByEmailAndDeletedAtIsNull(userEmail);
+		User user = userRepo.findByEmailAndDeletedAtIsNull(userEmail)
+				.orElseThrow(() -> new IllegalArgumentException("해당 유저를 찾을 수 없습니다."));
 		// user가 없거나 user의 refreshToken이 같지 않다면 null 반환
 		if (user == null || !user.getRefreshToken().equals(refreshToken)) {
 			return null;
