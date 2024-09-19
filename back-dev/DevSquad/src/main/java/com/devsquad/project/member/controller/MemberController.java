@@ -32,7 +32,9 @@ public class MemberController {
 	@Operation(summary = "프로젝트 멤버 추가", description = "프로젝트 멤버를 추가합니다.")
 	@PostMapping("")
 	public ResponseEntity<MemberResponse> addProjectMember(MemberRequest pro, User user){
+		//멤버 서비스에게 멤버 추가 부탁
 		MemberResponse savedProjectMember = projectMemberService.addProjectMember(pro, user);
+		//생성됨을 반환, 반환된 객체는 저장된 멤버 정보 포함
 		return ResponseEntity.status(HttpStatus.CREATED).body(savedProjectMember);
 	}
 	
@@ -40,7 +42,9 @@ public class MemberController {
 	@Operation(summary = "프로젝트 멤버 삭제", description = "특정 프로젝트 멤버를 삭제합니다.")
 	@DeleteMapping("/{id}")
 	public ResponseEntity<MemberResponse> deleteProjectMember(@PathVariable("id") Long id){
+		//멤버 서비스에게 멤버 삭제 부탁
 		MemberResponse dProjectMember = projectMemberService.deleteProjectMember(id);
+		//삭제된 멤버 반환
 		return ResponseEntity.ok(dProjectMember);
 	}
 	
@@ -48,6 +52,7 @@ public class MemberController {
 	@Operation(summary = "프로젝트 멤버 조회", description = "프로젝트 멤버를 반환합니다.")
 	@GetMapping("")
 	public ResponseEntity<List<MemberResponse>> memberList(){
+		//멤버 서비스에게 
 		List<MemberResponse> memList = projectMemberService.getAllMember();
 		return ResponseEntity.ok(memList);
 	}
