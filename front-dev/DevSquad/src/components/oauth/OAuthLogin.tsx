@@ -7,42 +7,61 @@ interface OAuthAPI {
   [key: string]: string;
 }
 
-const OAuthLogin = () => {
-  const { provider } = useParams<{ provider: string }>();
-  const code = new URLSearchParams(window.location.search).get("code");
-  console.log(code);
+export default function OAuthLogin() {
+  const { provider } = useParams<{ provider: string }>(); // useParams에서 provider를 string으로 추정
+  const code: string | null = new URLSearchParams(window.location.search).get("code");
+  console.log("Authorization Code:", code);
 
-  const oAuthAPI : OAuthAPI = {
-    kakao : "/oauth/kakao",
-    google : "/oauth/google"
-  }
+  const oAuthAPI: OAuthAPI = {
+    kakao: "/oauth/kakao",
+    google: "/oauth/google",
+  };
 
-  const login = async () => {
+  const login = async (): Promise<void> => {
+    if (!code || !provider) {
+      console.error("Missing authorization code or provider.");
+      return;
+    }
+
+    const apiEndpoint = oAuthAPI[provider];
+
+    if (!apiEndpoint) {
+      console.error("Unsupported provider:", provider);
+      return;
+    }
+
     try {
-      const res = await apiAxios.get(oAuthAPI[provider], {
+      const res = await apiAxios.get<{ accessToken: string }>(apiEndpoint, {
         params: { code },
       });
-      console.log(res);
-      if (res.status !== 200){
-        throw new Error("로그인 실패");
-      } else {
-        setCookie("accessToken", res.data.accessToken, { path: "/" });
-        window.location.href="/";
+
+      console.log("Response from OAuth:", res);
+
+      if (res.status !== 200) {
+        throw new Error("OAuth login failed");
       }
-    } catch (error) {
-      console.log(error);
+
+      setCookie("accessToken", res.data.accessToken, { path: "/" });
+      window.location.href = "/";
+    } catch (error: unknown) {
+      // error가 Error 타입이면 message를 출력
+      if (error instanceof Error) {
+        console.error("Login error:", error.message);
+      } else {
+        console.error("Login error:", error);
+      }
     }
   };
-  
-    useEffect(() => {
+
+  useEffect(() => {
+    if (code && provider) {
       login();
-    }, [code]);
+    }
+  }, [code, provider]);
 
-    return (
-      <>
-      <h1>로그인중 ... </h1>
-      </>
-    );
-};
-
-export default OAuthLogin;
+  return (
+    <div>
+      <p>Logging in...</p>
+    </div>
+  );
+}
