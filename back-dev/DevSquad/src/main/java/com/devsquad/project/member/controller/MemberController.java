@@ -52,8 +52,9 @@ public class MemberController {
 	@Operation(summary = "프로젝트 멤버 조회", description = "프로젝트 멤버를 반환합니다.")
 	@GetMapping("")
 	public ResponseEntity<List<MemberResponse>> memberList(){
-		//멤버 서비스에게 
+		//멤버 서비스에게 멤버리스트 조회 부탁
 		List<MemberResponse> memList = projectMemberService.getAllMember();
+		//멤버 리스트 반환
 		return ResponseEntity.ok(memList);
 	}
 	
@@ -61,7 +62,9 @@ public class MemberController {
 	@Operation(summary = "프로젝트 신청", description = "프로젝트를 신청합니다.")
 	@PostMapping("/{id}")
 	public ResponseEntity<MemberResponse> joinProject(Long proId, Long memId){
+		//멤버 서비스에게 프로젝트 신청 부탁 
 		MemberResponse memJoin = projectMemberService.joinProject(proId,memId);
+		//프로젝트에 신청된 멤버 반환
 		return ResponseEntity.ok(memJoin);
 	}
 }

@@ -40,25 +40,33 @@ public class ProjectService {
     		.endedAt(pro.getEndedAt())
     		.startedAt(pro.getStartedAt())
     		.build();
-    	
+    	//DB에 프로젝트 저장
         Project savedPro = projectRepository.save(project);
+        //타입 변환 후 반환
         return ProjectResponse.toDTO(savedPro);
     }
 
     public ProjectResponse getProject(Long id) {
+    	//id를 통해 프로젝트를 찾고
         Project pro = projectRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("없음"));
+        //타입 변환 후 반환
         return ProjectResponse.toDTO(pro);
     }
 
     public ProjectResponse deleteProject(Long id) {
+    	//id 를 통해 프로젝트를 찾고
         Project pro = projectRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("없음"));
+        //그 프로젝트 삭제
         projectRepository.deleteById(pro.getId());
         return null;
     }
 
     public ProjectResponse updateProject(ProjectRequest pro) {
+    	//id를 통해 프로젝트를 찾고
         Project project = projectRepository.findById(pro.getId()).orElseThrow(() -> new IllegalArgumentException("없음"));
+        //찾은 프로젝트 수정 후 저장
         Project updatedProject = projectRepository.save(project);
+        //타입 변환 후 반환
         return ProjectResponse.toDTO(updatedProject);
     }
 }
