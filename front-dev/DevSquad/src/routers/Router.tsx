@@ -6,6 +6,9 @@ import ProjectPage from "../pages/ProjectPage";
 import MyPage from "../pages/MyPage";
 import PostDetail from "../components/community/PostDetail";
 import PostForm from "../components/community/PostForm";
+import GoogleLogin from "../components/oauth/GoogleLogin";
+import KakaoLogin from "../components/oauth/KakaoLogin";
+import OAuthLogin from "../components/oauth/OAuthLogin";
 
 
 export default function Router() {
@@ -15,6 +18,11 @@ export default function Router() {
       
         {/* 메인 페이지 */}
         <Route path="/" element={<MainPage />} />
+
+        {/* OAuth */}
+        <Route path="/oauth/:provider" element={<OAuthLogin />} />
+        // <Route path="/oauth/google" element={<GoogleLogin />} />
+        // <Route path="/oauth/kakao" element={<KakaoLogin />} />
 
         {/* 프로젝트 페이지 */}
         <Route path="/project/*" element={<ProjectPage />}/>
@@ -26,7 +34,9 @@ export default function Router() {
 
         {/* 마이 페이지 */}
         <Route path="/my-page/*" element={<MyPage />} />
-        
+
+        {/* 404 에러 페이지 */}
+        <Route path="/*" element={<h1>아마 404</h1>} />
 
       </Route>
     </Routes>

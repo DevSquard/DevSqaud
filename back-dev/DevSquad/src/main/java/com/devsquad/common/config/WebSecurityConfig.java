@@ -77,6 +77,7 @@ public class WebSecurityConfig {
 	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		// 특정 URL에 대한 접근
 		http.authorizeHttpRequests(auth -> 
+			// /api/oauth/**
 			auth.requestMatchers(
 				"/api/auth/delete"
 			).hasRole("USER")

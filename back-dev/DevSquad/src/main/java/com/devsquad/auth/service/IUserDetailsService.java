@@ -20,7 +20,8 @@ public class IUserDetailsService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		log.info("[loadUserByUsername] 사용자 이메일 조회. username: {}", email);
-		User user = userRepo.findByEmailAndDeletedAtIsNull(email);
+		User user = userRepo.findByEmailAndDeletedAtIsNull(email)
+				.orElseThrow(() -> new IllegalArgumentException("해당 유저를 찾을 수 없습니다."));
 		if (user == null) {
 			throw new UsernameNotFoundException("유저를 찾을 수 없음");
 		}
