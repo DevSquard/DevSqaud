@@ -41,11 +41,11 @@ oauth2:
       token-uri: https://oauth2.googleapis.com/token
       user-info-request-uri: https://www.googleapis.com/oauth2/v3/userinfo
     kakao:
-      client-id:
-      client-secret:
-      redirect-uri:
-      token-uri:
-      user-info-request-uri:
+      client-id: 5dfa43ae2f6f10ba8341535fddb93b59
+      client-secret: kxVnvrkWHyYMkOarY9h8upoV8pJ0upxr
+      redirect-uri: http://localhost:5173/oauth/kakao
+      token-uri: https://kauth.kakao.com/oauth/token
+      user-info-request-uri: https://kapi.kakao.com/v2/user/me
 
 springdoc:
   api-docs:

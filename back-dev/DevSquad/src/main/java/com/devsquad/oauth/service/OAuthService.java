@@ -1,12 +1,9 @@
 package com.devsquad.oauth.service;
 
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.Map;
-
-import javax.management.RuntimeErrorException;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -41,6 +38,7 @@ public class OAuthService {
 		String providedAccessToken = getAccessToken(code, provider);
 		// 2. provider에서 제공하는 accessToken으로 사용자 정보를 추출한다.
 		User user = generateOAuthUser(providedAccessToken, provider);
+		System.out.println(providedAccessToken);
 		// 3. 사용자 정보를 조회하고
 		// 만약 기존에 있는 사용자라면 (oauth 인증 여부에 따라 oauth true로 변경)
 		// 만약 기존에 없는 사용자라면 (새로 가입 _ DB 추가)
@@ -95,12 +93,12 @@ public class OAuthService {
 	private User generateOAuthUser(String accessToken, String provider) {
 		// 설정 가져오기
 		OAuth2Properties.Client client = oAuth2Properties.getClients().get(provider);
-		
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Authorization", "Bearer " + accessToken);
 		
 		RestTemplate rt = new RestTemplate();
 		ResponseEntity<JsonNode> responseEntity = rt.exchange(client.getUserInfoRequestUri(), HttpMethod.GET, new HttpEntity<>(headers), JsonNode.class);
+		System.out.println(responseEntity.getBody());
 
 		if (!responseEntity.getStatusCode().is2xxSuccessful() || responseEntity.getBody() == null) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "사용자 정보를 가져올 수 없음");
@@ -121,6 +119,16 @@ public class OAuthService {
 						.name(name)
 						.oAuth(true)
 						.build();
+			} else if (jsonNode.has("id") && jsonNode.has("properties")) {
+				email = jsonNode.get("id").asText() + "@kakao.com";
+				name = jsonNode.get("properties").get("nickname").asText();
+				user = User.builder()
+						.email(email)
+						.name(name)
+						.oAuth(true)
+						.build();
+			} else {
+				throw new RuntimeException("해당 사용자를 찾을 수 없습니다.");
 			}
 		} catch (RuntimeException e) {
 			throw new RuntimeException("해당 사용자를 찾을 수 없습니다.");
