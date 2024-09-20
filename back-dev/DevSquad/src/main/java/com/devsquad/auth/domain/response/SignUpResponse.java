@@ -1,4 +1,4 @@
-package com.devsquad.auth.domain;
+package com.devsquad.auth.domain.response;
 
 import java.time.LocalDate;
 

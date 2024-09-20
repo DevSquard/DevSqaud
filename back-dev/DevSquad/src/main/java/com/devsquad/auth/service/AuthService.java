@@ -8,8 +8,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.devsquad.auth.domain.SignUpRequest;
-import com.devsquad.auth.domain.SignUpResponse;
 import com.devsquad.auth.domain.UserDeleteRequest;
+import com.devsquad.auth.domain.response.SignUpResponse;
+import com.devsquad.auth.domain.response.UserInfoResponse;
 import com.devsquad.auth.entity.User;
 import com.devsquad.auth.repository.UserRepository;
 import com.devsquad.common.jwt.JwtProvider;
@@ -117,6 +118,12 @@ public class AuthService {
 		userRepo.save(user);
 		
 		return tokenMap;
+	}
+
+	// 유저 미니 프로필 불러오기 서비스
+	public UserInfoResponse getMyInfo(String email) {
+		User user = userRepo.findByEmailAndDeletedAtIsNull(email).orElseThrow(() -> new IllegalArgumentException("해당 유저 정보가 없습니다."));
+		return UserInfoResponse.toDTO(user);
 	}
 
 

@@ -7,7 +7,7 @@ import java.util.Map;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import com.devsquad.auth.domain.LoginResponse;
+import com.devsquad.auth.domain.response.LoginResponse;
 import com.devsquad.auth.entity.User;
 import com.devsquad.auth.repository.UserRepository;
 import com.devsquad.common.utils.TokenUtils;

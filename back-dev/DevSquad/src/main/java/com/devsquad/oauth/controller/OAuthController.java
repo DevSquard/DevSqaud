@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.devsquad.auth.domain.LoginResponse;
+import com.devsquad.auth.domain.response.LoginResponse;
 import com.devsquad.oauth.service.OAuthService;
 
 import jakarta.servlet.http.HttpServletResponse;

@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -14,10 +15,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.devsquad.auth.domain.LoginRequest;
-import com.devsquad.auth.domain.LoginResponse;
 import com.devsquad.auth.domain.SignUpRequest;
-import com.devsquad.auth.domain.SignUpResponse;
 import com.devsquad.auth.domain.UserDeleteRequest;
+import com.devsquad.auth.domain.response.LoginResponse;
+import com.devsquad.auth.domain.response.SignUpResponse;
+import com.devsquad.auth.domain.response.UserInfoResponse;
 import com.devsquad.auth.entity.User;
 import com.devsquad.auth.service.AuthService;
 import com.devsquad.common.utils.TokenUtils;
@@ -97,4 +99,12 @@ public class AuthController {
 				.build());
 	}
 
+	// 미니 프로필 회원 정보 불러오기
+	@Operation(summary = "미니 프로필", description = "미니 프로필을 불러옵니다.")
+	@GetMapping("/my-info")
+	public ResponseEntity<UserInfoResponse> getMyInfo(@AuthenticationPrincipal User user) {
+		log.info("[getMyInfo] 유저 미니 프로필 불러오기");
+		UserInfoResponse userInfo = authService.getMyInfo(user.getEmail());
+		return ResponseEntity.ok().body(userInfo);
+	}
 }

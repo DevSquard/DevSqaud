@@ -27,7 +27,60 @@
 }
 
 .loggedInInnerContainer {
-  
+  width: 100%;
+  height: 100%;
+}
+
+.myInfo {
+  border: 1px solid #ccc;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  unicode-bidi: isolate;
+}
+
+.thumb {
+  overflow: hidden;
+  position: relative;
+  border-radius: 50%;
+  cursor: pointer;
+  margin-right: 10px;
+  border: 1px solid #ccc;
+  padding: 1px;
+}
+
+.myInfoImg {
+  display: block;
+  width: 64px;
+  height: 64px;
+  background-size: cover;
+  background-position: 50% 50%;
+  flex: 3;
+}
+
+.myInfoText {
+  flex: 9;
+  line-height: 100%;
+}
+
+.myInfoText p {
+  margin-top: 10px;
+  margin-bottom: 0;
+  border-top: 1px solid #ccc;
+}
+
+.nickname {
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 1.3;
+  width: 70%;
+  word-wrap: break-word;
+}
+
+.streak {
+  padding-top: 10px;
 }
 
 .loginTitle {

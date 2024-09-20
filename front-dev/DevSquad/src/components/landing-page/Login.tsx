@@ -14,8 +14,19 @@ interface LoginForm {
   password: string
 };
 
+interface MyInfo {
+  nickname: string,
+  hotLevel: number,
+  streakCount: number
+};
+
 export default function Login() {
-  const [cookies, setCookie, removeCookie] = useCookies(['accessToken']);
+  const [cookies] = useCookies(['accessToken']);
+  const [myInfo, setMyInfo] = useState<MyInfo>({
+    nickname: '',
+    hotLevel: 0,
+    streakCount: 0
+  });
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(isLoggedInState);
   const [ loginForm, setLoginForm ] = useState<LoginForm>({ email: '', password: '' });
   const navigate = useNavigate();
@@ -69,12 +80,22 @@ export default function Login() {
     
   };
 
+  const callMyInfo = async () => {
+    const res = await apiAxios.get("/auth/my-info");
+    setMyInfo(res.data);
+  };
+
   useEffect(() => {
     // 쿠키에서 액세스 토큰을 읽어서 로그인 상태를 확인합니다.
     if (cookies.accessToken) {
       setIsLoggedIn(true);
+      callMyInfo();
     }
   }, [cookies.accessToken]);
+
+  useEffect(() => {
+    console.log("Updated myInfo:", myInfo); // 상태 업데이트 후 로그
+  }, [myInfo]);
 
   return (
     <div className={style.container}>
@@ -83,7 +104,17 @@ export default function Login() {
         <div className={style.loginContainer}>
           <div className={style.loggedInInnerContainer}>
             <div className={style.myInfo}>
-              여기에 미니 프로필 표시
+              <div className={style.thumb}>
+                <img src={googleSymbol} alt="이미지" className={style.myInfoImg} />
+              </div>
+              <div className={style.myInfoText}>
+                <strong className={style.nickname}>{myInfo.nickname}</strong>
+                <p className={style.streak}>
+                  <span>스트릭 : </span>
+                  <span>{myInfo.streakCount}</span>
+                  <span>일</span>
+                </p>
+              </div>
             </div>
           </div>
         </div> 
