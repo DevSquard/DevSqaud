@@ -8,8 +8,8 @@ import { useCookies } from "react-cookie";
 const NavBar = () => {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(isLoggedInState);
-  const [cookies, setCookie, removeCookie] = useCookies(['accessToken', 'refreshToken']);
-  
+  const [cookies, setCookie, removeCookie] = useCookies(['accessToken']);
+
   // 로그인 페이지로 이동 시키기
   const handleLoginClick = () => {
     navigate("/login");
@@ -17,12 +17,9 @@ const NavBar = () => {
   
   // 로그아웃
   const handleLogout = () => {
-    console.log(cookies.refreshToken);
-    removeCookie('accessToken', { path: '/', expires: new Date(0) });
-    removeCookie('refreshToken', { path: '/', expires: new Date(0) });
-    setIsLoggedIn(false); // 상태 업데이트
-    console.log("로그아웃 처리 완료");
-    // window.location.href = '/'; // 로그아웃 후 리디렉션
+    removeCookie("accessToken");
+    setIsLoggedIn(false);    
+    window.location.href = '/'; // 로그아웃 후 리디렉션
   };
   
   

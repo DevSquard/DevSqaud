@@ -15,7 +15,7 @@ interface LoginForm {
 };
 
 export default function Login() {
-  const [cookies, setCookie, removeCookie] = useCookies(['accessToken', 'refreshToken']);
+  const [cookies, setCookie, removeCookie] = useCookies(['accessToken']);
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(isLoggedInState);
   const [ loginForm, setLoginForm ] = useState<LoginForm>({ email: '', password: '' });
   const navigate = useNavigate();
@@ -83,7 +83,7 @@ export default function Login() {
         <div className={style.loginContainer}>
           <div className={style.loggedInInnerContainer}>
             <div className={style.myInfo}>
-
+              여기에 미니 프로필 표시
             </div>
           </div>
         </div> 
