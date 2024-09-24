@@ -1,6 +1,7 @@
 package com.devsquad.auth.entity;
 
 import java.time.LocalDate;
+
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashSet;
@@ -106,11 +107,6 @@ public class User implements UserDetails {
 	@Column(name = "streak_count", nullable = false)
 	@Builder.Default
 	private int streakCount = 0;
-	
-	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "user_streaks", joinColumns = @JoinColumn(name = "user_id"))
-	@Column(name = "streak_date")
-	private Set<LocalDate> streakDates = new HashSet<>();
 
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)

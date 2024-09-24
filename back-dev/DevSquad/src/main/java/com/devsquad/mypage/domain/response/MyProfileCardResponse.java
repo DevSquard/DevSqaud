@@ -18,23 +18,8 @@ public class MyProfileCardResponse {
 	private boolean[] streakDaysInMonth;
 
 	public static MyProfileCardResponse toDTO(User user) {
-		LocalDate now = LocalDate.now();
-		YearMonth yearMonth = YearMonth.from(now);
-		int totalDaysInMonth = yearMonth.lengthOfMonth();
-
-		boolean[] streakDays = new boolean[totalDaysInMonth];
-		Set<LocalDate> streDates = user.getStreakDates();
-
-		for (LocalDate date : streDates) {
-			if (date.getYear() == now.getYear() && date.getMonth() == now.getMonth()) {
-				int dayOfMonth = date.getDayOfMonth();
-				if (dayOfMonth <= totalDaysInMonth) {
-					streakDays[dayOfMonth - 1] = true;
-				}
-			}
-		}
 
 		return MyProfileCardResponse.builder().id(user.getId()).nickName(user.getNickName()).language(user.getLanguage())
-				.streakCount(user.getStreakCount()).intro(user.getIntro()).streakDaysInMonth(streakDays).build();
+				.streakCount(user.getStreakCount()).intro(user.getIntro()).build();
 	}
 }
