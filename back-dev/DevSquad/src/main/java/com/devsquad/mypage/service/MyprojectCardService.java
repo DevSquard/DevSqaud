@@ -1,5 +1,8 @@
 package com.devsquad.mypage.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.devsquad.auth.entity.User;
@@ -41,6 +44,9 @@ public class MyprojectCardService {
 
 		MyProjectCard myProjectCard = myprojectCardRepository.findById(id)
 				.orElseThrow(() -> new IllegalArgumentException("없는 게시물 입니다"));
+		if (!myProjectCard.getUser().getId().equals(user.getId())) {
+			throw new IllegalArgumentException("본인이 아님");
+		}
 
 		myprojectCardRepository.delete(myProjectCard);
 		return MyProjectCardResponse.toDTO(myProjectCard);
@@ -48,6 +54,38 @@ public class MyprojectCardService {
 
 	// 카드 수정하기
 	public MyProjectCardResponse editProjectCard(MyProjectCardEditRequest projectCardDTO) {
-		
+
+		User user = userRepository.findById(projectCardDTO.getUserId())
+				.orElseThrow(() -> new IllegalArgumentException("해당 유저를 찾을 수 없음"));
+
+		MyProjectCard myProjectCard = myprojectCardRepository.findById(projectCardDTO.getId())
+				.orElseThrow(() -> new IllegalArgumentException("없는 게시물 입니다"));
+		if (!myProjectCard.getUser().getId().equals(user.getId())) {
+			throw new IllegalArgumentException("본인이 아님");
+		}
+		if (projectCardDTO.getTitle() != null) {
+			myProjectCard.setTitle(projectCardDTO.getTitle());
+		}
+		if (projectCardDTO.getContent() != null) {
+			myProjectCard.setContent(projectCardDTO.getContent());
+		}
+
+		MyProjectCard editedProjectCard = myprojectCardRepository.save(myProjectCard);
+		MyProjectCardResponse result = MyProjectCardResponse.toDTO(editedProjectCard);
+		return result;
+
 	}
+
+	// 카드 리스트
+	public List<MyProjectCardResponse> getAllProjectCard() {
+		List<MyProjectCard> projectCardList = myprojectCardRepository.findAll();
+		if (projectCardList.size() > 0) {
+			List<MyProjectCardResponse> ProjectCardResponseList = projectCardList.stream()
+					.map(MyProjectCardResponse::toDTO).toList();
+			return ProjectCardResponseList;
+		} else {
+			return new ArrayList<>();
+		}
+	}
+
 }

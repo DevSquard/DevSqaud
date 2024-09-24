@@ -7,13 +7,11 @@ import lombok.Data;
 
 @Data
 public class MyProjectCardDeleteRequest {
+
 	private Long id;
-	private String title;
-	private String content;
-	private String image;
 	private Long userId;
 
 	public MyProjectCard toEntity(User user) {
-		return MyProjectCard.builder().title(title).content(content).image(image).user(user).build();
+		return MyProjectCard.builder().user(user).build();
 	}
 }
