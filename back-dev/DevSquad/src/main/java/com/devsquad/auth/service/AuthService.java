@@ -1,7 +1,9 @@
 package com.devsquad.auth.service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -126,6 +128,16 @@ public class AuthService {
 		return UserInfoResponse.toDTO(user);
 	}
 
+	// 유저 스트릭 찍기
+	public void userStreakCounter(User user) {
+		User myUser = userRepo.findByEmailAndDeletedAtIsNull(user.getEmail()).orElseThrow(() -> new IllegalArgumentException("해당 유저 정보가 없습니다."));
+		// 유저 최근 로그인 날짜가 오늘과 다르다면(오늘 로그인하지 않았다면) 스트릭 추가
+		if (myUser.getLoginedAt() == null || !myUser.getLoginedAt().toLocalDate().equals(LocalDate.now())) {
+			myUser.setStreakCount(myUser.getStreakCount() + 1);
+		}
+		myUser.setLoginedAt(LocalDateTime.now());
+		userRepo.save(myUser);
+	}
 
 
 }

@@ -80,6 +80,10 @@ export default function Login() {
     
   };
 
+  const loginStreak = async () => {
+    await apiAxios.post("/auth/streak-count");
+  };
+
   const callMyInfo = async () => {
     const res = await apiAxios.get("/auth/my-info");
     setMyInfo(res.data);
@@ -89,6 +93,7 @@ export default function Login() {
     // 쿠키에서 액세스 토큰을 읽어서 로그인 상태를 확인합니다.
     if (cookies.accessToken) {
       setIsLoggedIn(true);
+      loginStreak();
       callMyInfo();
     }
   }, [cookies.accessToken]);

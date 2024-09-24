@@ -107,4 +107,11 @@ public class AuthController {
 		UserInfoResponse userInfo = authService.getMyInfo(user.getEmail());
 		return ResponseEntity.ok().body(userInfo);
 	}
+	
+	// 사용자 스트릭 찍기
+	@Operation(summary = "사용자 스트릭", description = "최근 로그인 기준으로 스트릭을 기록합니다.")
+	@PostMapping("/streak-count")
+	public void countStreak(@AuthenticationPrincipal User user) {
+		authService.userStreakCounter(user);
+	}
 }
