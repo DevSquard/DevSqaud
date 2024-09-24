@@ -61,7 +61,7 @@ public class MemberController {
 	//프로젝트 신청
 	@Operation(summary = "프로젝트 신청", description = "프로젝트를 신청합니다.")
 	@PostMapping("/{id}")
-	public ResponseEntity<MemberResponse> joinProject(Long proId, Long memId){
+	public ResponseEntity<MemberResponse> joinProject(@PathVariable("id") Long proId, Long memId){
 		//멤버 서비스에게 프로젝트 신청 부탁 
 		MemberResponse memJoin = projectMemberService.joinProject(proId,memId);
 		//프로젝트에 신청된 멤버 반환

@@ -48,6 +48,6 @@ public class MyprojectCardService {
 
 	// 카드 수정하기
 	public MyProjectCardResponse editProjectCard(MyProjectCardEditRequest projectCardDTO) {
-
+		
 	}
 }
