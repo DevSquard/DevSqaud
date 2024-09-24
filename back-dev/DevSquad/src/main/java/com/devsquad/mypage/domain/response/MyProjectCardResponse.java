@@ -1,6 +1,7 @@
 package com.devsquad.mypage.domain.response;
 
-import com.devsquad.auth.domain.UserResponse;
+
+import com.devsquad.auth.domain.response.UserResponse;
 import com.devsquad.mypage.entity.MyProjectCard;
 
 import lombok.Builder;
