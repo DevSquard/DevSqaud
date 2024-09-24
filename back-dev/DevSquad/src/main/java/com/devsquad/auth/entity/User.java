@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.data.annotation.CreatedDate;
-
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
@@ -24,6 +23,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -107,7 +107,7 @@ public class User implements UserDetails {
 	@Builder.Default
 	private int streakCount = 0;
 	
-	@ElementCollection
+	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "user_streaks", joinColumns = @JoinColumn(name = "user_id"))
 	@Column(name = "streak_date")
 	private Set<LocalDate> streakDates = new HashSet<>();

@@ -44,13 +44,13 @@ public class Project {
 	private String simpleIntro;
 	
 	@Column(nullable = false)
-	private String description;
+	private String description; 
 	
 	
 	@Column(nullable = false)
 	private int participaint;
 	
-	@Column
+	@Column(name = "dev_stack")
 	private String devStack;
 	
 	@CreatedDate

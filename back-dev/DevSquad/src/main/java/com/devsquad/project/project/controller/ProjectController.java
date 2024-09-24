@@ -43,28 +43,36 @@ public class ProjectController {
 	@Operation(summary = "프로젝트 목록 조회", description = "프로젝트 목록을 반환합니다.")
 	@GetMapping("")//프로젝트 전체 리스트
 	public ResponseEntity<List<ProjectResponse>> getAllProject(){
+		//프로젝트 서비스에게 프로젝트 목록 조회 부탁
 		List<ProjectResponse> li = projectService.getAllProject();
+		//프로젝트 목록 반환
 		return ResponseEntity.ok(li);
 	}
 	
 	@Operation(summary = "특정 프로젝트 조회", description = "특정 프로젝트를 반환합니다.")
 	@GetMapping("/{id}")//특정 프로젝트 보기
 	public ResponseEntity<ProjectResponse> getProject(@PathVariable("id") Long id){
+		//프로젝트 서비스에게 특정 프로젝트 조회 부탁
 		ProjectResponse pro = projectService.getProject(id);
+		//특정 프로젝트 반환
 		return ResponseEntity.ok(pro);
 	}
 	
 	@Operation(summary = "프로젝트 삭제", description = "특정 프로젝트를 삭제합니다.")
 	@DeleteMapping("/{id}")//프로젝트 삭제
 	public ResponseEntity<ProjectResponse> deleteProject(@PathVariable("id") Long id){
+		//프로젝트 서비스에게 프로젝트 삭제 부탁
 		ProjectResponse dpro = projectService.deleteProject(id);
+		//삭제된 프로젝트 반환
 		return ResponseEntity.ok(dpro);
 	}
 	
 	@Operation(summary = "프로젝트 수정", description = "특정 프로젝트를 수정합니다.")
 	@PatchMapping("")//프로젝트 수정
 	public ResponseEntity<ProjectResponse> updateProject(ProjectRequest pro){
+		//프로젝트 서비스에게 프로젝트 수정 부탁
 		ProjectResponse upro = projectService.updateProject(pro);
+		//수정된 프로젝트 반환
 		return ResponseEntity.ok(upro);
 	}
 	
