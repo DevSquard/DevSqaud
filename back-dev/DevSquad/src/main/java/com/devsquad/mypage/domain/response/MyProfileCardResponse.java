@@ -1,9 +1,5 @@
 package com.devsquad.mypage.domain.response;
 
-import java.time.LocalDate;
-import java.time.YearMonth;
-import java.util.Set;
-
 import com.devsquad.auth.entity.User;
 
 import lombok.Builder;

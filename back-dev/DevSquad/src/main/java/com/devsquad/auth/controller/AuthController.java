@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.devsquad.auth.domain.LoginRequest;
 import com.devsquad.auth.domain.SignUpRequest;
 import com.devsquad.auth.domain.UserDeleteRequest;
 import com.devsquad.auth.domain.response.LoginResponse;
@@ -25,8 +24,6 @@ import com.devsquad.auth.service.AuthService;
 import com.devsquad.common.utils.TokenUtils;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

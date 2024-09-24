@@ -3,7 +3,6 @@ package com.devsquad.auth.service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Map;
-import java.util.Optional;
 
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -13,7 +12,9 @@ import com.devsquad.auth.domain.SignUpRequest;
 import com.devsquad.auth.domain.UserDeleteRequest;
 import com.devsquad.auth.domain.response.SignUpResponse;
 import com.devsquad.auth.domain.response.UserInfoResponse;
+import com.devsquad.auth.entity.Streak;
 import com.devsquad.auth.entity.User;
+import com.devsquad.auth.repository.StreakRepository;
 import com.devsquad.auth.repository.UserRepository;
 import com.devsquad.common.jwt.JwtProvider;
 import com.devsquad.common.utils.TokenUtils;
@@ -28,6 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class AuthService {
 	private final UserRepository userRepo;
+	private final StreakRepository streakRepo;
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
 	private final JwtProvider jwtProvider;
 	private final TokenUtils tokenUtils;
@@ -131,11 +133,36 @@ public class AuthService {
 	// 유저 스트릭 찍기
 	public void userStreakCounter(User user) {
 		User myUser = userRepo.findByEmailAndDeletedAtIsNull(user.getEmail()).orElseThrow(() -> new IllegalArgumentException("해당 유저 정보가 없습니다."));
-		// 유저 최근 로그인 날짜가 오늘과 다르다면(오늘 로그인하지 않았다면) 스트릭 추가
-		if (myUser.getLoginedAt() == null || !myUser.getLoginedAt().toLocalDate().equals(LocalDate.now())) {
+		LocalDate currentLogin = (myUser.getLoginedAt() != null) ? 
+				myUser.getLoginedAt().toLocalDate()
+				: null;
+		LocalDate today = LocalDate.now();
+		Streak streak = new Streak();
+		if (myUser.getLoginedAt() == null) { // 처음 로그인 이라면
 			myUser.setStreakCount(myUser.getStreakCount() + 1);
+			// 스트릭 기록하기
+			streak.setStreakDate(today);
+			streak.setUser(myUser);
+			streakRepo.save(streak);
 		}
+		// 로그인이 null이 아니라는 조건
+		else {
+			// 저장된 로그의 다음날이 오늘이라면 스트릭 추가
+			if (currentLogin.plusDays(1).equals(today)) {
+				myUser.setStreakCount(myUser.getStreakCount() + 1);
+				// 스트릭 기록하기
+				streak.setStreakDate(today);
+				streak.setUser(myUser);
+				streakRepo.save(streak);
+			} else if (today.getDayOfMonth() - currentLogin.getDayOfMonth() >= 2) { // 아니라면 스트릭 초기화
+				myUser.setStreakCount(0);
+			}
+
+		}
+		
+		// 로그인 스탬프 찍기
 		myUser.setLoginedAt(LocalDateTime.now());
+		
 		userRepo.save(myUser);
 	}
 
