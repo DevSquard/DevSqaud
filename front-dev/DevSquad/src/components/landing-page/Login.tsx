@@ -156,7 +156,7 @@ export default function Login() {
             </form>
           </div>
             {/* 회원가입 폼으로 이동시키기 */}
-            <button className={style.signupButton} onClick={() => navigate("/")}>회원가입</button>
+            <button className={style.signupButton} onClick={() => navigate("/sign-up")}>회원가입</button>
             {/* 구글 로그인 폼으로 이동시키기 */}
             <div className={style.googleContainer} onClick={() => handleGoogleLogin()}>
               <img src={googleSymbol} alt="구글 로그인" className={style.kakaoSymbolImg} />

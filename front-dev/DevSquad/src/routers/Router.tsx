@@ -9,6 +9,7 @@ import PostForm from "../components/community/PostForm";
 import GoogleLogin from "../components/oauth/GoogleLogin";
 import KakaoLogin from "../components/oauth/KakaoLogin";
 import OAuthLogin from "../components/oauth/OAuthLogin";
+import SignUp from "../components/auth/SignUp";
 
 
 export default function Router() {
@@ -19,8 +20,9 @@ export default function Router() {
         {/* 메인 페이지 */}
         <Route path="/" element={<MainPage />} />
 
-        {/* OAuth */}
+        {/* Auth + OAuth */}
         <Route path="/oauth/:provider" element={<OAuthLogin />} />
+        <Route path="/sign-up" element={<SignUp />} />
         // <Route path="/oauth/google" element={<GoogleLogin />} />
         // <Route path="/oauth/kakao" element={<KakaoLogin />} />
 

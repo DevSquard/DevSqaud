@@ -1,0 +1,49 @@
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.sign_up_container {
+  display: flex;
+  flex-direction: column;
+  width: 460px;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+}
+
+.sign_up_container input {
+  height: 50px;
+  background-color: unset;
+  padding: 5px;
+  border: none;
+  border-bottom: 1px solid #ccc;
+}
+
+.sign_up_container input:last-of-type {
+  border-bottom: none;
+}
+
+.sign_up_container input:focus {
+  outline: none; 
+  border: 3px solid #3a945c;
+}
+
+.sign_up_container input:first-of-type:focus {
+  outline: none; 
+  border-radius: 12px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.sign_up_container input:last-of-type:focus {
+  outline: none; 
+  border-radius: 12px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
