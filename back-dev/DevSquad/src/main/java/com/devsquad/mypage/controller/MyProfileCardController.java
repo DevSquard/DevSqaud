@@ -12,9 +12,11 @@ import com.devsquad.mypage.domain.response.MyProfileCardResponse;
 import com.devsquad.mypage.service.MyProfileCardService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 @RestController
+@Tag(name = "마이페이지", description = "마이페이지 관련 api")
 @RequestMapping("/api/devsquad/mypage")
 @RequiredArgsConstructor
 public class MyProfileCardController {

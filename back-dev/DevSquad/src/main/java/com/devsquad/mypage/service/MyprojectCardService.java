@@ -39,14 +39,9 @@ public class MyprojectCardService {
 
 	// 카드 삭제하기
 	public MyProjectCardResponse deleteProjectCard(Long id, MyProjectCardDeleteRequest projectCardDTO) {
-		User user = userRepository.findById(projectCardDTO.getUserId())
-				.orElseThrow(() -> new IllegalArgumentException("해당 유저를 찾을 수 없음"));
 
 		MyProjectCard myProjectCard = myprojectCardRepository.findById(id)
 				.orElseThrow(() -> new IllegalArgumentException("없는 게시물 입니다"));
-		if (!myProjectCard.getUser().getId().equals(user.getId())) {
-			throw new IllegalArgumentException("본인이 아님");
-		}
 
 		myprojectCardRepository.delete(myProjectCard);
 		return MyProjectCardResponse.toDTO(myProjectCard);
@@ -79,6 +74,7 @@ public class MyprojectCardService {
 	// 카드 리스트
 	public List<MyProjectCardResponse> getAllProjectCard() {
 		List<MyProjectCard> projectCardList = myprojectCardRepository.findAll();
+		System.out.println("Card count: " + projectCardList.size());
 		if (projectCardList.size() > 0) {
 			List<MyProjectCardResponse> ProjectCardResponseList = projectCardList.stream()
 					.map(MyProjectCardResponse::toDTO).toList();

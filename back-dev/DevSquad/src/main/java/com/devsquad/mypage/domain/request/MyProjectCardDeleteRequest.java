@@ -9,7 +9,6 @@ import lombok.Data;
 public class MyProjectCardDeleteRequest {
 
 	private Long id;
-	private Long userId;
 
 	public MyProjectCard toEntity(User user) {
 		return MyProjectCard.builder().user(user).build();
