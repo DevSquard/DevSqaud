@@ -62,18 +62,18 @@ public class ProjectController {
 	
 	@Operation(summary = "프로젝트 삭제", description = "특정 프로젝트를 삭제합니다.")
 	@DeleteMapping("/{id}")//프로젝트 삭제
-	public ResponseEntity<ProjectResponse> deleteProject(@PathVariable("id") Long id){
+	public ResponseEntity<ProjectResponse> deleteProject(@PathVariable("id") Long id, @AuthenticationPrincipal User user){
 		//프로젝트 서비스에게 프로젝트 삭제 부탁
-		ProjectResponse dpro = projectService.deleteProject(id);
+		ProjectResponse dpro = projectService.deleteProject(id, user);
 		//삭제된 프로젝트 반환
 		return ResponseEntity.ok(dpro);
 	}
 	
 	@Operation(summary = "프로젝트 수정", description = "특정 프로젝트를 수정합니다.")
 	@PatchMapping("")//프로젝트 수정
-	public ResponseEntity<ProjectResponse> updateProject(ProjectRequest pro){
+	public ResponseEntity<ProjectResponse> updateProject(ProjectRequest pro, @AuthenticationPrincipal User user){
 		//프로젝트 서비스에게 프로젝트 수정 부탁
-		ProjectResponse upro = projectService.updateProject(pro);
+		ProjectResponse upro = projectService.updateProject(pro, user);
 		//수정된 프로젝트 반환
 		return ResponseEntity.ok(upro);
 	}

@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.boot.model.naming.IllegalIdentifierException;
 import org.springframework.stereotype.Service;
 
 import com.devsquad.auth.entity.User;
@@ -67,25 +68,31 @@ public class ProjectService {
         return ProjectResponse.toDTO(pro);
     }
 
-    public ProjectResponse deleteProject(Long id) {
+    public ProjectResponse deleteProject(Long id,User user) {
     	//id 를 통해 프로젝트를 찾고
         Project pro = projectRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("없음"));
-        //그 프로젝트 삭제
-        projectRepository.deleteById(pro.getId());
+        if(user.getId() == pro.getUser().getId()) {
+        	//그 프로젝트 삭제
+        	projectRepository.deleteById(pro.getId());
+        }
+        
         return null;
     }
 
-    public ProjectResponse updateProject(ProjectRequest pro) {
+    public ProjectResponse updateProject(ProjectRequest pro, User user) {
     	//id를 통해 프로젝트를 찾고
         Project project = projectRepository.findById(pro.getId()).orElseThrow(() -> new IllegalArgumentException("없음"));
-        //수정할 값이 null이 아니라면 입력한 값으로 수정
-        if(pro.getDescription() != null) project.setDescription(pro.getDescription());
-        if(pro.getSimpleIntro() != null) project.setSimpleIntro(pro.getSimpleIntro());
-        if(pro.getProjectName() != null) project.setProjectName(pro.getProjectName());
+        //로그인 한 사용자가 작성자와 같고, 수정할 값이 null이 아니라면 입력한 값으로 수정
+        if(user.getId() == pro.getUserId()) {
+        	if(pro.getDescription() != null) project.setDescription(pro.getDescription());
+            if(pro.getSimpleIntro() != null) project.setSimpleIntro(pro.getSimpleIntro());
+            if(pro.getProjectName() != null) project.setProjectName(pro.getProjectName());
+          //프로젝트 수정 후 저장
+            Project updatedProject = projectRepository.save(project);
+            //타입 변환 후 반환
+            return ProjectResponse.toDTO(updatedProject);
+        }
+        return null;
         
-        //프로젝트 수정 후 저장
-        Project updatedProject = projectRepository.save(project);
-        //타입 변환 후 반환
-        return ProjectResponse.toDTO(updatedProject);
     }
 }
