@@ -121,6 +121,9 @@ export default function Login() {
                 </p>
               </div>
             </div>
+            <div className={style.myInfoBody}>
+              <h1>다른 내용이 들어갈 자리</h1>
+            </div>
           </div>
         </div> 
       ) : (
