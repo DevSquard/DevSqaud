@@ -4,7 +4,9 @@ package com.devsquad.project.member.controller;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,9 +43,9 @@ public class MemberController {
 	//삭제
 	@Operation(summary = "프로젝트 멤버 삭제", description = "특정 프로젝트 멤버를 삭제합니다.")
 	@DeleteMapping("/{id}")
-	public ResponseEntity<MemberResponse> deleteProjectMember(@PathVariable("id") Long id){
+	public ResponseEntity<MemberResponse> deleteProjectMember(@PathVariable("id") Long id,@AuthenticationPrincipal User user){
 		//멤버 서비스에게 멤버 삭제 부탁
-		MemberResponse dProjectMember = projectMemberService.deleteProjectMember(id);
+		MemberResponse dProjectMember = projectMemberService.deleteProjectMember(id, user);
 		//삭제된 멤버 반환
 		return ResponseEntity.ok(dProjectMember);
 	}
@@ -61,10 +63,16 @@ public class MemberController {
 	//프로젝트 신청
 	@Operation(summary = "프로젝트 신청", description = "프로젝트를 신청합니다.")
 	@PostMapping("/{id}")
-	public ResponseEntity<MemberResponse> joinProject(@PathVariable("id") Long proId, Long memId){
+	public ResponseEntity<String> joinProject(@PathVariable("id") Long proId,@ AuthenticationPrincipal User user){
+		//자신이 만든 프로젝트라면 신청 불가
+		boolean check = projectMemberService.checkNotMyProject(user, proId);
+		if (!check) {
+			return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("자신이 만든 프로젝트엔 참여 불가");
+		}
 		//멤버 서비스에게 프로젝트 신청 부탁 
-		MemberResponse memJoin = projectMemberService.joinProject(proId,memId);
+		MemberResponse memJoin = projectMemberService.joinProject(proId, user);
 		//프로젝트에 신청된 멤버 반환
-		return ResponseEntity.ok(memJoin);
+		return ResponseEntity.ok("프로젝트 신청 완료");
 	}
+	
 }

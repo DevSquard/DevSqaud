@@ -29,11 +29,16 @@ public class MemberServies {
 		return projectResponse;
 	}
 
-	public MemberResponse deleteProjectMember(Long id) {
+	public MemberResponse deleteProjectMember(Long id, User user) {
 		//id를 통해 멤버를 찾고
 		Member dpro = memberRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("없음"));
-		//찾은 멤버 삭제
-		memberRepository.deleteById(dpro.getId());
+		if(user.getId() == dpro.getProject().getUser().getId()) {
+			
+			//찾은 멤버 삭제
+			memberRepository.deleteById(dpro.getId());
+		}
+		
+		
 		return null;
 	}
 
@@ -46,15 +51,27 @@ public class MemberServies {
 		return pLi;
 	}
 
-	public MemberResponse joinProject(Long proId, Long memId) {
+	public MemberResponse joinProject(Long proId, User user) {
+		
 		//id를 통해 프로젝트를 찾고,
 		Project pro = projectRepository.findById(proId).orElseThrow(() -> new IllegalArgumentException("없음"));
 		//id를 통해 멤버를 특정하고
-		Member proM = memberRepository.findById(memId).orElseThrow(() -> new IllegalArgumentException("없음"));
-		//특정한 멤버의 프로젝트에 선택한 프로젝트 추가
-		proM.setProject(pro);
-		//타입 변환 후 반환
-		return MemberResponse.toDTO( memberRepository.save(proM));
+		Member proM = memberRepository.findById(user.getId()).orElseThrow(() -> new IllegalArgumentException("없음"));
+		
+		memberRepository.save()	
+		return MemberResponse.;
+	}
+
+	// 자신의 프로젝트인지 체크하는 메서드
+	public boolean checkNotMyProject(User user, Long id) {
+		// 해당 프로젝트를 가져오고
+		Project project = projectRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("찾는 프로젝트가 없습니다."));
+		// 그 프로젝트의 주인이 자신이라면 false 반환
+		if (project.getUser().getId() == user.getId()) {
+			return false;			
+		}
+		// 기본적으로 true 반환
+		return true;
 	}
 
 }

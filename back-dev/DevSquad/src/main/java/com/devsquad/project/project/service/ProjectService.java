@@ -1,11 +1,9 @@
 package com.devsquad.project.project.service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.boot.model.naming.IllegalIdentifierException;
 import org.springframework.stereotype.Service;
 
 import com.devsquad.auth.entity.User;
@@ -16,8 +14,10 @@ import com.devsquad.project.project.entity.Project;
 import com.devsquad.project.project.repository.ProjectRepository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class ProjectService {
     private final ProjectRepository projectRepository;
@@ -41,7 +41,6 @@ public class ProjectService {
     
     public ProjectResponse addProject(ProjectRequest pro, User user) {
     	// request에 담긴 userId로 유저 가져오기
-    	User user1 = userRepository.findByIdAndDeletedAtIsNull(pro.getUserId()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
     	
     	// Request를 Project 타입으로 변환
     	Project project = Project.builder()
@@ -57,6 +56,7 @@ public class ProjectService {
     		.build();
     	//DB에 프로젝트 저장
         Project savedPro = projectRepository.save(project);
+        log.info("저장된 프로젝트 : {}", savedPro);
         //타입 변환 후 반환
         return ProjectResponse.toDTO(savedPro);
     }

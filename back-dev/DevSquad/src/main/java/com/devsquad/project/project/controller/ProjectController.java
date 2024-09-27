@@ -35,7 +35,8 @@ public class ProjectController {
 	@Operation(summary = "프로젝트 추가", description = "프로젝트를 생성합니다.")
 	@PostMapping("/create")//프로젝트 추가
 	public ResponseEntity<ProjectResponse> addProject(@RequestBody ProjectRequest pro, @AuthenticationPrincipal User user){
-		log.info("[addProject] 프로젝트 생성 정보 : {}", pro, user);
+		log.info("[addProject] 프로젝트 생성 정보 : {}", pro);
+		log.info("[addProject] 프로젝트 생성 유저 : {}", user);
 		// 프로젝트 입력 정보 + 해당 유저정보를 Repository로 넘겨줌
 		ProjectResponse savedpro = projectService.addProject(pro, user);
 		// 201 상태를 넘겨주고, Project 객체를 리턴
