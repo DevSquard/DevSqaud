@@ -1,68 +1,40 @@
 import style from "./ProjectMain.module.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import test from "../../assets/logo.png";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
+import { ChangeEvent, useEffect, useState } from "react";
+import { resolvePath, useNavigate } from "react-router-dom";
 
-// interface CardProps {
-//   imageSrc: string;
-//   altText: string;
-//   text: string;
-// }
+import { useRecoilState } from "recoil";
+import { IsProjectModalOpen } from "../../recoil/IsProjectModalOpen";
+import { AlertDialog } from "./AlertDialog";
+import ProjectItem from "./ProjectItem";
+
 interface Project {
   id: number;
   projectName: string;
   simpleIntro: string;
   participaint: number;
 }
-interface IDialogProps {
-  open: boolean;
-  handleClose: () => void;
-  title: string;
-  content: string;
-}
 
-// 개별 프로젝트 항목 컴포넌트
-const ProjectItem: React.FC<Project> = ({
-  id,
-  projectName,
-  simpleIntro,
-  participaint,
-}) => (
-  <tr>
-    <td>{id}</td>
-    <td>{projectName}</td>
-    <td>{simpleIntro}</td>
-    <td>{participaint}</td>
-  </tr>
-);
-
-export const AlertDialog: React.FC<IDialogProps> = ({
-  open,
-  handleClose,
-  title,
-  content,
-}) => {
-  return (
-    <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>{title}</DialogTitle>
-      <DialogContent>
-        <DialogContentText>{content}</DialogContentText>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose}>Close</Button>
-      </DialogActions>
-    </Dialog>
-  );
-};
 const ProjectMain = () => {
-  const handleAddProject = () => {
-    AlertDialog;
-  }
-
+  const [isOpen, setIsOpen] = useRecoilState(IsProjectModalOpen);
   const [project, setProject] = useState<Project[]>([]);
-  const navigate =  useNavigate();
+
+  const navigate = useNavigate();
+
+  const handleModal = () => {
+    setIsOpen(!isOpen);
+  };
+  useEffect(() => {
+    const fetchProject = async () => {
+      const exampleProject: Project[] = [
+        {id : 1, projectName : "1", participaint : 3, simpleIntro : "a"},
+      ];
+      setProject(exampleProject);
+    };
+    fetchProject();
+  }, []);
+
   return (
     <div className={`${style.container}`}>
       <div className={`${style.title}`}>전체 프로젝트</div>
@@ -73,22 +45,8 @@ const ProjectMain = () => {
           출시 서비스만 보기
         </span>
 
-        <button onClick={handleAddProject}>프로젝트 생성</button>
+        <button onClick={handleModal}>프로젝트 생성</button>
       </div>
-
-      <ul>
-        <li>
-          {project.map((project) => (
-            <ProjectItem
-             key={project.id} 
-             id={project.id}
-             projectName={project.projectName}
-             simpleIntro={project.simpleIntro}
-             participaint={project.participaint} />
-          ))}
-        </li>
-      </ul>
-
       <div>
         <div className={`${style.common}`}>
           <table className={`${style.tags}`}>
@@ -102,12 +60,27 @@ const ProjectMain = () => {
             <div className="card" style={{ width: "18rem" }}>
               <img src={test} className="card-img-top" alt="아몰랑" />
               <div className="card-body">
-                <p className="card-text">dd</p>
+                <p className="card-text">
+                  {project.map((pro) => (
+                    <ProjectItem
+                      id={pro.id}
+                      projectName={pro.projectName}
+                      simpleIntro={pro.simpleIntro}
+                      participaint={pro.participaint}
+                    />
+                  ))}
+                </p>
               </div>
             </div>
           </li>
         </ul>
       </div>
+      {/* AlertDialog 렌더링 */}
+      <AlertDialog
+        open={isOpen}
+        handleClose={handleModal}
+        title="프로젝트 생성"
+      />
     </div>
   );
 };
